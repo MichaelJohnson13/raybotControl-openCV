@@ -3,6 +3,7 @@
 # 通讯协议：[x][x][xxx][x][xxx]
 # A部分：A+[...]
 # M部分： M+[F/B]+[000]+[F/B]+[000]，分别表示左边的前进/后退+速度，右边的前进/后退+速度
+# D部分： D+D100D100/F000F000/S000S000,分别表示下沉，上浮，复位
 # P部分： P+P+[float],比例增益
 #        P+I+[float],积分增益
 #        P+P+[float],微分增益
@@ -32,6 +33,7 @@ import time
 import sys
 import threading
 from MotorDriver import MotorDriver
+import Servo
 from RayPID import PID
 lock = threading.Lock()
 
@@ -56,6 +58,8 @@ footage_socket.bind("tcp://*:5555")
 
 # control 2 motor flags
 Motor = MotorDriver()
+# control 2 Servo flags
+Ser = Servo()
 #a PID controler.
 RPID = PID(0.006, 0.0001, 0.005)
 #Globale variables
