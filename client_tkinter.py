@@ -3,6 +3,7 @@
 # 通讯协议：[x][x][xxx][x][xxx]
 # A部分：A+[...]
 # M部分： M+[F/B]+[000]+[F/B]+[000]，分别表示左边的前进/后退+速度，右边的前进/后退+速度
+# D部分： D+D100D100/F000F000/S000S000,分别表示下沉，上浮，复位
 # P部分： P+P+[float],比例增益
 #        P+I+[float],积分增益
 #        P+P+[float],微分增益
@@ -220,7 +221,14 @@ def command_auto():
 def command_record():
     socket_tcp.send(b'IF100F100')
 def command_stop_record():
-    socket_tcp.send(b'OF100F100')    
+    socket_tcp.send(b'OF100F100')
+#增加舵机功能
+def command_float():
+    socket_tcp.send(b'DF000F000')
+def command_dive():
+    socket_tcp.send(b'DD000D000')
+def command_return():
+    socket_tcp.send(b'DS000S000')
 
 def hit_me():
     global is_conneted
@@ -258,6 +266,17 @@ l.pack()
 
 lmain = tk.Label(root)
 lmain.pack()
+
+#加入浮潜按钮
+botton_frame = tk.Frame(root)
+botton_frame.pack()
+botton_up = tk.Button(botton_frame, text='上浮', font=('黑体', 6), width=10, height=1, command= command_float)
+botton_return = tk.Button(botton_frame, text='复位', font=('黑体', 6), width=10, height=1, command=command_return)
+botton_close = tk.Button(botton_frame, text='下潜', font=('黑体', 6), width=10, height=1, command=command_dive)
+
+botton_up.pack(side="left")
+botton_return.pack(side="left")
+botton_close.pack(side="left")
 
 l = tk.Label(root, width=10, height=1, text=" ")
 l.pack()
